@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8f3ed">
+  <title>Nejila — Little Universe</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap');
+
+    :root {
+      --paper: #f8f3ed;
+      --ink: #29252e;
+      --muted: #77717b;
+      --plum: #6f4b70;
+      --rose: #f2b9c6;
+      --peach: #ffb68c;
+      --butter: #f4d879;
+      --sage: #c4d8bd;
+      --lilac: #d7c9ee;
+      --white: #fffdf9;
+      --border: rgba(41,37,46,.13);
+      --shadow: 0 22px 60px rgba(70,47,65,.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; line-height: 1.65; overflow-x: hidden; }
+    body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 50; opacity: .13; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.13'/%3E%3C/svg%3E"); }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    .wrap { width: min(1160px, 90%); margin: auto; }
+    .nav-shell { position: sticky; top: 0; z-index: 40; background: rgba(248,243,237,.84); backdrop-filter: blur(18px); border-bottom: 1px solid var(--border); }
+    nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.55rem; letter-spacing: -.06em; }
+    .brand span { color: var(--plum); }
+    .nav-links { display: flex; gap: 29px; align-items: center; font-size: .88rem; color: #5e5763; }
+    .nav-links a { transition: color .2s; }
+    .nav-links a:hover { color: var(--plum); }
+    .nav-pill { background: var(--ink); color: white !important; border-radius: 99px; padding: 10px 17px; }
+    .menu { display: none; width: 42px; height: 42px; border: 0; background: var(--butter); border-radius: 50%; cursor: pointer; }
+    .hero { min-height: 700px; padding: 76px 0 90px; display: grid; grid-template-columns: 1.05fr .95fr; align-items: center; gap: 35px; }
+    .tiny-label { display: inline-flex; align-items: center; gap: 9px; border: 1px solid var(--border); background: rgba(255,253,249,.7); padding: 8px 14px; border-radius: 99px; font-size: .78rem; font-weight: 700; letter-spacing: .04em; }
+    .tiny-label b { color: var(--plum); font-size: 1.05rem; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-family: 'Playfair Display', serif; font-size: clamp(4rem, 8vw, 7.4rem); letter-spacing: -.075em; line-height: .91; margin: 27px 0 25px; font-weight: 600; }
+    h1 .italic { font-style: italic; color: var(--plum); }
+    .hero-copy > p { max-width: 490px; color: var(--muted); font-size: 1.06rem; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 12px; border-radius: 99px; padding: 13px 20px; font-size: .9rem; font-weight: 700; border: 1px solid var(--ink); transition: transform .22s, box-shadow .22s; cursor: pointer; }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(41,37,46,.13); }
+    .btn-dark { background: var(--ink); color: white; }
+    .btn-outline { background: transparent; }
+    .hero-visual { position: relative; min-height: 485px; display: grid; place-items: center; }
+    .orbit { position: absolute; width: min(420px, 85vw); aspect-ratio: 1; border: 1px dashed rgba(111,75,112,.4); border-radius: 50%; transform: rotate(-18deg); }
+    .orbit::before, .orbit::after { content: ''; position: absolute; border-radius: 50%; }
+    .orbit::before { width: 15px; height: 15px; background: var(--peach); top: 13%; left: 18%; }
+    .orbit::after { width: 10px; height: 10px; background: var(--plum); right: 9%; bottom: 25%; }
+    .art-backdrop { position: absolute; width: 330px; height: 380px; background: var(--rose); border-radius: 48% 52% 44% 56% / 42% 40% 60% 58%; transform: rotate(8deg); animation: breathe 8s ease-in-out infinite; }
+    .art-window { position: relative; width: 285px; height: 350px; border: 8px solid var(--white); border-radius: 150px 150px 25px 25px; background: linear-gradient(155deg,#f8d8b5,#d9c7eb 58%,#a8c5a8); box-shadow: var(--shadow); display: grid; place-items: center; overflow: hidden; }
+    .art-window::before { content: ''; position: absolute; width: 230px; height: 230px; border-radius: 50%; background: rgba(255,244,201,.8); top: 28px; right: -70px; }
+    .art-window::after { content: ''; position: absolute; height: 125px; width: 340px; background: rgba(111,75,112,.2); border-radius: 50% 50% 0 0; bottom: -75px; }
+    .portrait-symbol { position: relative; z-index: 2; font-size: 7rem; filter: drop-shadow(0 12px 12px rgba(41,37,46,.12)); transform: translateY(-5px); }
+    .art-caption { position: absolute; z-index: 3; bottom: 17px; background: var(--white); padding: 7px 14px; border-radius: 99px; font-size: .72rem; font-weight: 700; letter-spacing: .02em; }
+    .floating { position: absolute; z-index: 4; display: grid; place-items: center; box-shadow: var(--shadow); }
+    .flower { top: 48px; left: 5%; width: 74px; height: 74px; background: var(--butter); border-radius: 50%; font-size: 2rem; animation: bob 5s ease-in-out infinite; }
+    .heart { right: 1%; bottom: 75px; width: 66px; height: 66px; background: var(--sage); border-radius: 50%; font-size: 1.8rem; animation: bob 6s ease-in-out infinite reverse; }
+    .handnote { position: absolute; left: 0; bottom: 55px; background: var(--white); border: 1px solid var(--border); padding: 12px 16px; border-radius: 14px; font-size: .78rem; line-height: 1.45; box-shadow: var(--shadow); transform: rotate(-7deg); }
+    .handnote strong { font-family: 'Playfair Display', serif; font-size: 1.05rem; }
+    .scroll-note { display: flex; align-items: center; gap: 12px; margin-top: 54px; color: var(--muted); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; }
+    .scroll-note span { width: 42px; height: 1px; background: var(--plum); }
+    section.content-section { padding: 96px 0; }
+    .section-top { display: flex; justify-content: space-between; align-items: end; gap: 28px; margin-bottom: 36px; }
+    .eyebrow { color: var(--plum); text-transform: uppercase; letter-spacing: .18em; font-weight: 800; font-size: .73rem; margin-bottom: 12px; }
+    h2 { font-family: 'Playfair Display', serif; font-size: clamp(2.7rem, 5vw, 4.5rem); letter-spacing: -.055em; line-height: 1.04; margin-bottom: 0; font-weight: 600; }
+    .section-top > p { max-width: 410px; color: var(--muted); margin-bottom: 2px; }
+    .about-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 20px; }
+    .about-note { min-height: 315px; padding: 32px; border-radius: 26px; background: var(--butter); position: relative; overflow: hidden; }
+    .about-note .big { font-size: 2.7rem; }
+    .about-note h3 { font-family: 'Playfair Display', serif; font-size: 2rem; margin: 35px 0 12px; max-width: 300px; line-height: 1.12; }
+    .about-note p { max-width: 340px; color: #62543d; font-size: .94rem; }
+    .about-note .scribble { position: absolute; right: -12px; bottom: -43px; font-size: 9rem; opacity: .18; transform: rotate(-18deg); }
+    .about-detail { padding: 35px; border: 1px solid var(--border); background: rgba(255,253,249,.75); border-radius: 26px; display: flex; flex-direction: column; justify-content: center; }
+    .about-detail h3 { font-family: 'Playfair Display', serif; font-size: 1.7rem; margin-bottom: 12px; }
+    .about-detail p { color: var(--muted); }
+    .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 9px; }
+    .tag { padding: 8px 13px; border-radius: 99px; background: #f3e8f2; font-size: .78rem; font-weight: 700; }
+    .tag:nth-child(2n) { background: #e4eddf; } .tag:nth-child(3n) { background: #ffe5d6; }
+    .work-section { background: #eee7f3; border-radius: 40px; }
+    .project-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .project { background: var(--white); border-radius: 23px; padding: 13px; border: 1px solid rgba(41,37,46,.07); transition: transform .25s, box-shadow .25s; }
+    .project:hover { transform: translateY(-7px) rotate(-.5deg); box-shadow: var(--shadow); }
+    .project-cover { height: 210px; border-radius: 16px; display: grid; place-items: center; font-size: 4rem; position: relative; overflow: hidden; }
+    .project-cover::before { content: ''; position: absolute; width: 175px; height: 175px; border: 1px solid rgba(41,37,46,.17); border-radius: 50%; top: -76px; left: -45px; }
+    .project-cover::after { content: ''; position: absolute; width: 105px; height: 105px; border: 1px solid rgba(41,37,46,.17); border-radius: 50%; bottom: -50px; right: -25px; }
+    .cover-rose { background: #f3c6d0; } .cover-sage { background: #c9dfc6; } .cover-peach { background: #ffd0b6; }
+    .project-body { padding: 18px 9px 11px; }
+    .project-meta { display: flex; justify-content: space-between; align-items: center; color: var(--plum); font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .project-body h3 { font-family: 'Playfair Display', serif; font-size: 1.55rem; margin: 9px 0 6px; }
+    .project-body p { color: var(--muted); font-size: .88rem; margin-bottom: 0; }
+    .skill-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: 55px; align-items: center; }
+    .skill-intro p { color: var(--muted); margin-top: 20px; max-width: 390px; }
+    .skill-board { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .skill { display: flex; align-items: center; gap: 13px; padding: 17px; background: var(--white); border: 1px solid var(--border); border-radius: 17px; font-weight: 700; font-size: .9rem; }
+    .skill i { font-style: normal; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 13px; background: var(--rose); font-size: 1.15rem; }
+    .skill:nth-child(2) i, .skill:nth-child(5) i { background: var(--sage); }
+    .skill:nth-child(3) i, .skill:nth-child(6) i { background: var(--butter); }
+    .skill:nth-child(4) i { background: var(--lilac); }
+    .contact-section { background: var(--ink); color: var(--white); border-radius: 40px 40px 0 0; padding: 85px 0 60px; position: relative; overflow: hidden; }
+    .contact-section::after { content: '✳'; position: absolute; right: 4%; top: 3%; color: rgba(242,185,198,.13); font-size: 15rem; pointer-events: none; }
+    .contact-section .eyebrow { color: var(--butter); }
+    .contact-section h2 { max-width: 750px; position: relative; z-index: 1; }
+    .contact-row { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-top: 28px; position: relative; z-index: 1; }
+    .contact-row p { color: #c8c0ce; max-width: 440px; margin: 0; }
+    .contact-row .btn { background: var(--butter); border-color: var(--butter); color: var(--ink); white-space: nowrap; }
+    .socials { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 33px; font-size: .85rem; color: #d8d0dc; position: relative; z-index: 1; }
+    .socials a:hover { color: var(--butter); }
+    footer { background: var(--ink); border-top: 1px solid #514956; color: #aaa2b1; font-size: .78rem; padding: 20px 0; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 15px; }
+    .to-top { display: none; position: fixed; z-index: 30; bottom: 22px; right: 22px; width: 45px; height: 45px; border: 0; border-radius: 50%; background: var(--plum); color: white; box-shadow: var(--shadow); cursor: pointer; font-size: 1.15rem; }
+    .to-top.visible { display: block; }
+    .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in-view { opacity: 1; transform: translateY(0); }
+    @keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -12px; } }
+    @keyframes breathe { 0%,100% { border-radius: 48% 52% 44% 56% / 42% 40% 60% 58%; } 50% { border-radius: 56% 44% 58% 42% / 49% 58% 42% 51%; } }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; padding-top: 65px; gap: 10px; }
+      .hero-copy { text-align: center; }
+      .hero-copy > p { margin-inline: auto; }
+      .actions { justify-content: center; }
+      .scroll-note { justify-content: center; margin-top: 38px; }
+      .hero-visual { min-height: 470px; }
+      .section-top { flex-direction: column; align-items: start; }
+      .about-layout, .skill-layout { grid-template-columns: 1fr; }
+      .skill-layout { gap: 25px; }
+      .project-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 560px) {
+      .nav-links { display: none; position: absolute; left: 5%; right: 5%; top: 68px; flex-direction: column; align-items: stretch; gap: 14px; padding: 20px; background: var(--white); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); }
+      .nav-links.open { display: flex; }
+      .nav-pill { text-align: center; }
+      .menu { display: block; }
+      .hero { min-height: auto; padding: 55px 0 70px; }
+      h1 { font-size: clamp(4rem, 18vw, 6rem); }
+      .hero-visual { min-height: 390px; }
+      .art-backdrop { width: 275px; height: 315px; }
+      .art-window { width: 240px; height: 300px; }
+      .portrait-symbol { font-size: 5.8rem; }
+      .orbit { width: 330px; }
+      .flower { left: 0; top: 28px; width: 60px; height: 60px; }
+      .heart { right: 0; bottom: 43px; width: 56px; height: 56px; }
+      .handnote { bottom: 20px; left: -3px; }
+      section.content-section { padding: 70px 0; }
+      .project-grid, .skill-board { grid-template-columns: 1fr; }
+      .work-section { border-radius: 27px; }
+      .about-note, .about-detail { padding: 25px; }
+      .contact-row { align-items: start; flex-direction: column; }
+      .contact-section { border-radius: 28px 28px 0 0; padding: 70px 0 45px; }
+      footer .wrap { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav-shell">
+    <nav class="wrap" aria-label="Main navigation">
+      <a class="brand" href="#home">nejila<span>✳</span></a>
+      <button class="menu" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#about">The girl behind the screen</a>
+        <a href="#work">My little projects</a>
+        <a href="#skills">My toolkit</a>
+        <a class="nav-pill" href="#contact">Say hello ↗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="wrap hero" id="home">
+      <div class="hero-copy">
+        <div class="tiny-label"><b>✳</b> A LITTLE SPACE ON THE INTERNET</div>
+        <h1>Hi, I'm<br><span class="italic">Nejila.</span></h1>
+        <p>A curious mind learning to turn ideas into little digital things. I love pretty details, meaningful stories, and the magic that happens when creativity meets code.</p>
+        <div class="actions">
+          <a class="btn btn-dark" href="#work">Wander through my work <span>↗</span></a>
+          <a class="btn btn-outline" href="#about">A little about me ♡</a>
+        </div>
+        <div class="scroll-note"><span></span> Scroll slowly, stay awhile</div>
+      </div>
+      <div class="hero-visual" aria-label="Colourful decorative portrait illustration">
+        <div class="orbit"></div>
+        <div class="art-backdrop"></div>
+        <div class="art-window">
+          <div class="portrait-symbol">🌷</div>
+          <div class="art-caption">soft heart, curious mind</div>
+        </div>
+        <div class="floating flower">✿</div>
+        <div class="floating heart">♡</div>
+        <div class="handnote"><strong>currently growing</strong><br>one line of code at a time ✨</div>
+      </div>
+    </section>
+
+    <section class="wrap content-section reveal" id="about">
+      <div class="section-top">
+        <div><div class="eyebrow">01 / A little introduction</div><h2>The person<br>behind the pixels.</h2></div>
+        <p>Not just a portfolio — a tiny corner of the internet that feels a bit like me: thoughtful, colourful, and always becoming.</p>
+      </div>
+      <div class="about-layout">
+        <article class="about-note">
+          <div class="big">☁️ ✿</div>
+          <h3>Still figuring it out. Still dreaming big.</h3>
+          <p>I'm Nejila — a student exploring the world of web development, one small experiment at a time.</p>
+          <div class="scribble">✳</div>
+        </article>
+        <article class="about-detail">
+          <h3>Things that feel like me</h3>
+          <p>I enjoy learning new things, finding inspiration in everyday moments, and making ordinary ideas feel a little more special. I'm at the beginning of my coding journey, and that's part of the story too.</p>
+          <div class="tags">
+            <span class="tag">Curious by nature</span><span class="tag">Creative thinker</span><span class="tag">Student life</span><span class="tag">Learning to code</span><span class="tag">Dreaming big</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section work-section reveal" id="work">
+      <div class="wrap">
+        <div class="section-top">
+          <div><div class="eyebrow">02 / Little things in progress</div><h2>Ideas, made<br>visible.</h2></div>
+          <p>These are starter project concepts for now. Swap them for your own creations as you build and learn.</p>
+        </div>
+        <div class="project-grid">
+          <article class="project">
+            <div class="project-cover cover-rose">🌿</div>
+            <div class="project-body"><div class="project-meta"><span>01 — Web design</span><span>✳</span></div><h3>Plant Notes</h3><p>A calm, friendly mini-site for plant lovers, with a fresh layout and tiny care reminders.</p></div>
+          </article>
+          <article class="project">
+            <div class="project-cover cover-sage">☁️</div>
+            <div class="project-body"><div class="project-meta"><span>02 — JavaScript</span><span>✳</span></div><h3>Little Day Planner</h3><p>A cheerful planning concept for organising daily tasks without losing the fun.</p></div>
+          </article>
+          <article class="project">
+            <div class="project-cover cover-peach">🎧</div>
+            <div class="project-body"><div class="project-meta"><span>03 — Creative</span><span>✳</span></div><h3>My Moodboard</h3><p>A personal collection of colours, music, and inspiration for different kinds of days.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap content-section reveal" id="skills">
+      <div class="skill-layout">
+        <div class="skill-intro"><div class="eyebrow">03 / Things I'm learning</div><h2>Little steps.<br>Lovely progress.</h2><p>I'm building my toolkit one concept at a time. These are the skills and creative habits I'm exploring on my journey.</p></div>
+        <div class="skill-board">
+          <div class="skill"><i>🌐</i> HTML5</div>
+          <div class="skill"><i>🎨</i> CSS & styling</div>
+          <div class="skill"><i>✨</i> JavaScript</div>
+          <div class="skill"><i>📱</i> Responsive design</div>
+          <div class="skill"><i>🧩</i> Problem solving</div>
+          <div class="skill"><i>💡</i> Creative thinking</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section reveal" id="contact">
+      <div class="wrap">
+        <div class="eyebrow">04 / Your turn</div>
+        <h2>Something lovely<br>starts with hello.</h2>
+        <div class="contact-row">
+          <p>Have an idea, a project, or just want to connect? I'd love to hear from you. Let's make the internet a little more lovely.</p>
+          <a class="btn" href="mailto:nejila@example.com">Write me a little note ↗</a>
+        </div>
+        <div class="socials">
+          <a href="https://github.com/" target="_blank" rel="noreferrer">GitHub ↗</a>
+          <a href="https://www.linkedin.com/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+          <a href="https://www.instagram.com/" target="_blank" rel="noreferrer">Instagram ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><div class="wrap"><span>© <span id="year"></span> Nejila. Made with a little ♡</span><span>Keep growing at your own pace ✿</span></div></footer>
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const navLinks = document.getElementById('navLinks');
+
+    menuBtn.addEventListener('click', () => {
+      const opened = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', String(opened));
+      menuBtn.textContent = opened ? '✕' : '☰';
+    });
+
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.textContent = '☰';
+      });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.reveal').forEach(section => observer.observe(section));
+
+    const toTop = document.getElementById('toTop');
+    window.addEventListener('scroll', () => {
+      toTop.classList.toggle('visible', window.scrollY > 450);
+    });
+    toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
